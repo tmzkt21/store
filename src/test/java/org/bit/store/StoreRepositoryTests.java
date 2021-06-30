@@ -22,40 +22,46 @@ public class StoreRepositoryTests {
     //CRUD
     @Autowired
     private StoreRepository storeRepository;
+
     // test
     @Test
-    public void test(){
-      log.info(storeRepository.getClass().getName() + "로그");
+    public void test() {
+        log.info(storeRepository.getClass().getName() + "로그");
     }
+
     // create insert
     // 각각의 컬럼에 1~ 300 까지 데이터 추가
+
     @Test
-    public void testInsult(){
-        IntStream.rangeClosed(1,300).forEach(i ->{
-            Store store = Store.builder().
-                    name("이승규" + i).
-                    latitude("위도" +i).
-                    longitude("경도" +i).
-                    address("주소" +i).
-                    mainMenu("메인요리" +i).
-                    build();
+    public void testCreate() {
+        IntStream.rangeClosed(1,300).forEach(todo ->
+        {
+            Store store = Store.builder()
+                    .name("가게이름" + todo)
+                    .latitude("위도" + todo)
+                    .longitude("경도" + todo)
+                    .address("주소" + todo)
+                    .mainMenu("주된메뉴" + todo)
+                    .build();
             storeRepository.save(store);
         });
     }
+
 
 
     //read select
     // 18 번째 컬럼찾기
     @Test
     public void testRead() {
-       Optional<Store> store = storeRepository.findById(350L);
+        Optional<Store> store = storeRepository.findById(150L);
 //        log.info(store.get());
         store.ifPresent(todo -> log.info(todo));
     }
+
     // paging
     @Test
-    public void testPaging(){
-        Pageable pageable = PageRequest.of(0,10, Sort.by("id").descending());
+    public void testPaging() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("id").descending());
 
         Page<Store> result = storeRepository.findAll(pageable);
 
@@ -71,18 +77,20 @@ public class StoreRepositoryTests {
         Optional<Store> result = storeRepository.findById(25L);
 
         result.ifPresent(todo -> {
-            todo.change("이름","위도","경도","주소","음식~");
+            todo.change("이름", "위도", "경도", "주소", "음식~");
             storeRepository.save(todo);
         });
 
     }
 
     @Test
-    public void testDelete(){
+    public void testDelete() {
         storeRepository.delete(Store.builder().id(29L).build());
     }
+
     @Test
     public void testUpdate2() {
-        storeRepository.upadateContent("300.." ,250L);
+        storeRepository.upadateContent("300..", 250L);
     }
+    // 실행 x
 }
